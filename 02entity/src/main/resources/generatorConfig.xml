@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 引入配置文件 -->
+    <properties url="file:///${project.build.directory}\\classes\\jdbc.properties" />
+    <!-- 在MBG工作的时候，需要额外加载的依赖包 location属性指明加载jar/zip包的全路径 -->
+    <classPathEntry location="${settings.localRepository}\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar" />
+    <context id="context1" targetRuntime="MyBatis3">
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="${project.build.sourceEncoding}" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+        <!-- 引入中文注释插件 -->
+        <plugin type="com.max.framework.mybatis.plugin.JavaDocPluginAdapter" />
+
+        <!-- 生成注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="false" />
+            <property name="suppressAllComments" value="false" />
+        </commentGenerator>
+
+        <!-- 数据库连接 -->
+        <jdbcConnection driverClass="${driver}" connectionURL="${mysqlurl}" userId="${user}" password="${password}" />
+        <!-- 生成entity类 -->
+        <javaModelGenerator targetPackage="${generatePackage}.mybatis.entity" targetProject="src/main/java">
+            <!-- for MyBatis3/MyBatis3Simple 自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter； -->
+            <property name="constructorBased" value="false" />
+        </javaModelGenerator>
+        <!-- 生成映射文件 -->
+        <sqlMapGenerator targetPackage="${generatePackage}.mybatis.dao" targetProject="src/main/java" />
+        <!-- 生成映射dao类 -->
+        <javaClientGenerator targetPackage="${generatePackage}.mybatis.dao" targetProject="src/main/java" type="XMLMAPPER" />
+        <!-- 以下为表 -->
+        <table catalog=""  tableName="mst_code_name" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="mst_data" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="mst_depart" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="mst_emp" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_func" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_role" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_role_func" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_login" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_wf_mud" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_wf_mud_ac" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_wf_real_ac" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_isola" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_log" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table tableName="sys_msg" enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+            enableUpdateByExample="false" selectByExampleQueryId="false">
+        </table>
+        <table schema="dbo"  tableName="data_archives" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_register" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_person" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_record" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_unarchives" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_window" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_dsr" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_court_record" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table>
+        <table schema="dbo"  tableName="data_material" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table>
+        <table schema="dbo"  tableName="data_lawyer" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table>
+        <table schema="dbo"  tableName="data_device" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table>    
+        <table schema="dbo"  tableName="data_video" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table> 
+        <table schema="dbo"  tableName="data_end_visit" 
+               enableCountByExample="false"  enableSelectByExample="false" 
+               enableDeleteByExample="false"  enableUpdateByExample="false" 
+               selectByExampleQueryId="false"  > 
+        </table>                      
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,7 @@
+<srcFile>src/main/resources/com/sql/ddl/mst_code_name.sql</srcFile>
+
+<table schema="dbo"  tableName="mst_code_name" 
+       enableCountByExample="false"  enableSelectByExample="false" 
+       enableDeleteByExample="false"  enableUpdateByExample="false" 
+       selectByExampleQueryId="false"  > 
+</table> 

@@ -1,0 +1,299 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>entity</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.dgit.petition</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <build>
+        <!-- 使用POM文件替换properties文件内容 -->
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- 导入execl数据 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dbunit-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+                <dependencies>
+                    <!-- mssql -->
+                    <!-- <dependency> -->
+                    <!-- <groupId>com.microsoft.sqlserver</groupId> -->
+                    <!-- <artifactId>sqljdbc4</artifactId> -->
+                    <!-- <version>4.0</version> -->
+                    <!-- </dependency> -->
+                    <!-- mysql -->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.38</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.dbunit</groupId>
+                        <artifactId>dbunit</artifactId>
+                        <version>2.4.8</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi</artifactId>
+                        <version>3.2-FINAL</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>${driver}</driver>
+                    <url>${driverUrl}${selftDatabase}?characterEncoding=utf8</url>
+                    <encoding>utf-8</encoding>
+                    <username>${user}</username>
+                    <password>${password}</password>
+                    <type>CLEAN_INSERT</type>
+<!--                     <src>src/test/resources/data/test-data.xls</src> -->
+                    <format>xls</format>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>init-data</id>
+                        <goals>
+                            <goal>operation</goal>
+                        </goals>
+                        <configuration>
+                            <dataTypeFactoryName>org.dbunit.ext.mssql.MsSqlDataTypeFactory</dataTypeFactoryName>
+                            <transaction>true</transaction>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 反向生成mybaits单表代码 -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.max.tools</groupId>
+                        <artifactId>mybatisplugin</artifactId>
+                        <version>1.3.0-RELEASE</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <verbose>true</verbose>
+                    <overwrite>true</overwrite>
+                    <configurationFile>${project.build.directory}/classes/generatorConfig.xml</configurationFile>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            sql-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.5,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>setuptables</id>
+            <build>
+                <plugins>
+                    <!-- 执行DDL插件 -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <dependencies>
+                            <!-- mssql -->
+                            <!-- <dependency> -->
+                            <!-- <groupId>com.microsoft.sqlserver</groupId> -->
+                            <!-- <artifactId>sqljdbc4</artifactId> -->
+                            <!-- <version>4.0</version> -->
+                            <!-- </dependency> -->
+                            <!-- mysql -->
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.38</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <driver>${driver}</driver>
+                            <url>${driverUrl}${selftDatabase}?characterEncoding=utf8</url>
+                            <username>${user}</username>
+                            <password>${password}</password>
+                        </configuration>
+                        <!-- 执行语句 -->
+                        <executions>
+                            <execution>
+                                <id>drop-databse</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- mssql -->
+                                    <!-- <url>${adminDriverUrl}</url> -->
+                                    <!-- mysql -->
+                                    <url>${driverUrl}${adminDatabase}?characterEncoding=utf8</url>
+                                    <autocommit>true</autocommit>
+                                    <!-- mssql -->
+                                    <!-- <sqlCommand> -->
+                                    <!-- IF EXISTS(SELECT 1 FROM sysdatabases WHERE -->
+                                    <!-- NAME=N'${selftDatabase}') -->
+                                    <!-- BEGIN -->
+                                    <!-- EXEC StopLogin -->
+                                    <!-- '${selftDatabase}' -->
+                                    <!-- DROP DATABASE ${selftDatabase} -->
+                                    <!-- END; -->
+                                    <!-- </sqlCommand> -->
+                                    <!-- mysql -->
+                                    <sqlCommand>
+                                        DROP DATABASE ${selftDatabase};
+                                    </sqlCommand>
+                                    <onError>continue</onError>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-databse</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- mssql -->
+                                    <!-- <url>${adminDriverUrl}</url> -->
+                                    <!-- mysql -->
+                                    <url>${driverUrl}${adminDatabase}?characterEncoding=utf8</url>
+                                    <autocommit>true</autocommit>
+                                    <!-- mssql -->
+                                    <!-- <sqlCommand> -->
+                                    <!-- IF NOT EXISTS(SELECT 1 FROM sysdatabases WHERE -->
+                                    <!-- NAME=N'${selftDatabase}') -->
+                                    <!-- BEGIN -->
+                                    <!-- CREATE DATABASE -->
+                                    <!-- ${selftDatabase} -->
+                                    <!-- ON -->
+                                    <!-- PRIMARY -->
+                                    <!--创建主数据库文件 -->
+                                    <!-- ( -->
+                                    <!-- NAME='${selftDatabase}', -->
+                                    <!-- FILENAME='${filepathDatabase}\${selftDatabase}.mdf', -->
+                                    <!-- SIZE=5MB, -->
+                                    <!-- MaxSize=unlimited, -->
+                                    <!-- FileGrowth=1MB -->
+                                    <!-- ) -->
+                                    <!-- LOG ON -->
+                                    <!--创建日志文件 -->
+                                    <!-- ( -->
+                                    <!-- NAME='${selftDatabase}Log', -->
+                                    <!-- FileName='${filepathDatabase}\${selftDatabase}_log.ldf', -->
+                                    <!-- Size=2MB, -->
+                                    <!-- MaxSize=20MB, -->
+                                    <!-- FileGrowth=1MB -->
+                                    <!-- ) -->
+                                    <!-- END; -->
+                                    <!-- </sqlCommand> -->
+                                    <!-- mysql -->
+                                    <sqlCommand>
+                                        CREATE DATABASE ${selftDatabase};
+                                    </sqlCommand>
+                                    <onError>continue</onError>
+                                </configuration>
+                            </execution>
+                            <!-- 创建数据库表DDL文件 -->
+                            <execution>
+                                <id>create-table</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/resources/com/sql/ddl/mst_code_name.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/mst_data.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/mst_depart.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/mst_emp.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_func.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_role.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_role_func.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_login.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_wf_mud.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_wf_mud_ac.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_wf_real_ac.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_isola.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_log.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/sys_msg.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_archives.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_register.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_person.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_record.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_unarchives.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_window.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_dsr.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_court_record.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_material.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_lawyer.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_device.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_video.sql</srcFile>
+                                        <srcFile>src/main/resources/com/sql/ddl/data_end_visit.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
